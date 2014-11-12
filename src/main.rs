@@ -1,9 +1,12 @@
+use std::io;
 use std::io::net::addrinfo;
 use std::io::TcpStream;
 
 
-fn main() {
-    let dns_lookup_result = addrinfo::get_host_addresses("www.example.com");
+fn test_http_request(host: &str) {
+    println!("host: {}", host);
+
+    let dns_lookup_result = addrinfo::get_host_addresses(host);
     match dns_lookup_result {
         Ok(ip_addresses) => {
             let ip_address = format!("{}", ip_addresses[0]);
@@ -23,6 +26,14 @@ fn main() {
         Err(error) => {
             println!("DNS lookup failed: {}", error);
         }
+    }
+
+}
+
+
+fn main() {
+    for line in io::stdin().lines() {
+        test_http_request(line.unwrap().as_slice());
     }
 }
 
